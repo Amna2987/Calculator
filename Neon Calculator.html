@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Calculator</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #0d0d0d;
+        font-family: monospace;
+        color: #fff;
+      }
+
+      .myCal {
+        width: 90%;
+        max-width: 350px;
+        padding: 15px;
+        border-radius: 15px;
+        background: #1a1a1a;
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+      }
+
+      .output {
+        height: 60px;
+        line-height: 60px;
+        background: #000;
+        color: #0ff;
+        margin-bottom: 15px;
+        font-size: 2em;
+        text-align: right;
+        border-radius: 8px;
+        padding: 0 12px;
+        box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.4);
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .btn {
+        flex: 1;
+        height: 60px;
+        margin: 5px;
+        background: #111;
+        color: #0ff;
+        font-size: 1.5em;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease;
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      }
+
+      .btn:hover {
+        background: #0ff;
+        color: #000;
+        box-shadow:
+          0 0 20px #0ff,
+          0 0 40px #0ff;
+      }
+
+      .btn:active {
+        background: #00e6e6;
+        box-shadow:
+          0 0 25px #0ff,
+          0 0 50px #0ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="myCal"></div>
+
+    <script>
+      const myCalculator = document.querySelector(".myCal");
+
+      const myKeys = [
+        ["1", "2", "3", "+"],
+        ["4", "5", "6", "-"],
+        ["7", "8", "9", "*"],
+        ["C", "0", "=", "/"],
+      ];
+
+      const myOper = ["+", "-", "*", "/"];
+      let myOutput;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        myOutput = document.createElement("div");
+        myOutput.classList.add("output");
+        myOutput.innerHTML = 0;
+        myCalculator.append(myOutput);
+
+        for (let x = 0; x < myKeys.length; x++) {
+          let row = document.createElement("div");
+          row.classList.add("row");
+          myCalculator.append(row);
+          console.log(row);
+
+          for (let y = 0; y < myKeys[x].length; y++) {
+            console.log(myKeys[x][y]);
+            let btns = document.createElement("div");
+            btns.classList.add("btn");
+            btns.innerHTML = myKeys[x][y];
+            row.append(btns);
+            btns.addEventListener("click", btnHit);
+          }
+        }
+      });
+
+      function btnHit() {
+        let myCal = myOutput.innerHTML;
+        let myValue = this.innerHTML;
+        console.log(this.innerHTML);
+
+        if (myCal == "0") {
+          myCal = "";
+        }
+
+        if (myValue === "C") {
+          myOutput.innerHTML = "0";
+          return;
+        }
+
+        if (myValue === "=") {
+          try {
+            myCal = eval(myCal) || 0;
+          } catch {
+            myCal = "Error";
+          }
+          myOutput.innerHTML = myCal;
+          return;
+        }
+
+        if (myCal === "" && myOper.includes(myValue)) return;
+        else {
+          let lastChar = myCal.substring(myCal.length - 1);
+          if (myOper.includes(myValue)) {
+            if (myOper.includes(lastChar)) {
+              myCal = myCal.substring(0, myCal.length - 1);
+            } else {
+              myCal = eval(myCal);
+            }
+          }
+          myCal = myCal + myValue;
+        }
+
+        myOutput.innerHTML = myCal;
+      }
+    </script>
+  </body>
+</html>
